@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Weather App</h1>
+      <div class="search">
+        <input type="text" id="search-bar" placeholder="Enter city name ...">
+        <button id="search-btn">Search</button>
+      </div>
+      <div class="weather">
+        <h2 id="city-name"></h2>
+        <div class="description" id="description"></div>
+        <div class="temperature" id="temperature"></div>
+        <div class="humidity" id="humidity"></div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
+
+body {
+  background: #f7f7f7;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 50px;
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+
+.search {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+#search-bar {
+  flex: 1;
+  padding: 10px;
+  border: none;
+}
+
+#search-btn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.weather {
+  border: 1px solid #ccc;
+  padding: 20px;
+  text-align: center;
+}
+
+#city-name {
+  font-size: 24px;
+  margin: 0 0 10px 0;
+}
+
+.description {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.temperature {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.humidity {
+  margin-bottom: 0;
+}
+
+const apiKey = "90637daf80b1edbf6f2e26e8a0de71a4";
+const searchCity = document.getElementById("search-bar");
+const searchButton = document.getElementById("search-btn");
+const cityName = document.getElementById("city-name");
+const description = document.getElementById("description");
+const temperature = document.getElementById("temperature");
+const humidity = document.getElementById("humidity");
+
+searchButton.addEventListener("click", function() {
+  let city = searchCity.value;
+  if (city === "") {
+    alert("Please enter a city name.");
+  } else {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`)
+    .then(response => response.json())
+    .then(data => {
+      cityName.innerText = data.name;
+      description.innerText = data.weather[0].description;
+      temperature.innerText = `${data.main.temp}°C`;
+      humidity.innerText = `Humidity: ${data.main.humidity}%`;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+});
